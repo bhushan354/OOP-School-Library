@@ -5,7 +5,8 @@ require_relative 'trimmer_decorator'
 class Person < Nameable
   attr_accessor :id, :name, :age
 
-  def initialize(id, name = 'Unknown', age = 0, parent_permission = true)
+  def initialize(age, name = 'Unknown', parent_permission: true)
+    super()
     @id = generate_id
     @name = name
     @age = age
