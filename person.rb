@@ -1,9 +1,11 @@
 require_relative './nameable'
+require_relative 'capitalize_decorator'
+require_relative 'trimmer_decorator'
 
 class Person < Nameable
   attr_accessor :id, :name, :age
 
-  def initialize(name: 'Unknown', age: 0, parent_permission: true)
+  def initialize(id, name = 'Unknown', age = 0, parent_permission = true)
     @id = generate_id
     @name = name
     @age = age
@@ -28,3 +30,10 @@ class Person < Nameable
     rand(1..1000)
   end
 end
+
+person = Person.new(22, 'maximilianus')
+person.correct_name
+capitalized_person = CapitalizeDecorator.new(person)
+puts capitalized_person.correct_name
+capitalized_trimmed_person = TrimmerDecorator.new(capitalized_person)
+puts capitalized_trimmed_person.correct_name

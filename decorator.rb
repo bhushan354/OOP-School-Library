@@ -1,9 +1,9 @@
 class Decorator < Nameable
     def initialize(nameable)
-        @namable = namable
+        @nameable = nameable
     end
 
     def correct_name
-       @namable.correct_name
+       @nameable.correct_name
     end
 end
