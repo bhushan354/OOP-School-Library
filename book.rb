@@ -14,4 +14,3 @@ class Book
     person.rentals << rental
   end
 end
-
