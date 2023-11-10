@@ -28,6 +28,10 @@ class Person < Nameable
     @age >= 18
   end
 
+  def add_rental(rental)
+    @rentals << rental
+  end
+
   def generate_id
     rand(1..1000)
   end
