@@ -3,12 +3,13 @@ require_relative 'capitalize_decorator'
 require_relative 'trimmer_decorator'
 
 class Person < Nameable
-  attr_accessor :id, :name, :age
+  attr_accessor :id, :name, :age, :rentals
 
   def initialize(age, name = 'Unknown', parent_permission: true)
     super()
     @id = generate_id
     @name = name
+    @rentals = []
     @age = age
     @parent_permission = parent_permission
   end
@@ -25,6 +26,10 @@ class Person < Nameable
 
   def of_age?
     @age >= 18
+  end
+
+  def add_rental(rental)
+    @rentals << rental
   end
 
   def generate_id
