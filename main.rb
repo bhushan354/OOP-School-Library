@@ -3,12 +3,12 @@ require './app'
 app = App.new
 
 def main(app)
-  showOptions
+  all_options_show
   number = gets.chomp.to_i
   execute_option(app, number)
 end
 
-def showOptions
+def all_options_show
   puts
   puts 'Get started by entering a number :'
   puts '1 - List Books'
@@ -22,9 +22,9 @@ end
 
 def execute_option(app, number)
   option_methods = {
-    1 => :listAllBooks,
-    2 => :listPersons,
-    3 => :createPerson,
+    1 => :list_all_books,
+    2 => :list_persons,
+    3 => :create_person,
     4 => :create_book_option,
     5 => :create_rental,
     6 => :get_rental_option,
@@ -43,10 +43,10 @@ def exit_app(*)
   puts 'Thank you for using Terminal App, Hope you liked it !'
 end
 
-def createPerson(app)
+def create_person(app)
   print 'Do you want to create Student(1) or Teacher (2)? [Your Response]: '
-  personInidividualCode = gets.chomp.to_i
-  app.createPerson(personInidividualCode)
+  person_individual_id = gets.chomp.to_i
+  app.create_person(person_individual_id)
   main(app)
 end
 
@@ -66,13 +66,13 @@ def get_rental_option(app)
   main(app)
 end
 
-def listAllBooks(app)
-  app.listAllBooks
+def list_all_books(app)
+  app.list_all_books
   main(app)
 end
 
-def listPersons(app)
-  app.listPersons
+def list_persons(app)
+  app.list_persons
   main(app)
 end
 

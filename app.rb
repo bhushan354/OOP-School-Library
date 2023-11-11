@@ -11,7 +11,7 @@ class App
     @persons = []
   end
 
-  def listAllBooks
+  def list_all_books
     @books.each do |book|
       puts "Title: \"#{book.title}\", Author: #{book.author}"
     end
@@ -23,10 +23,11 @@ class App
     puts 'Book creation successfully'
   end
 
-  def createPerson(person_id)
-    if person_id == 1
+  def create_person(person_id)
+    case person_id
+    when 1
       create_student
-    elsif person_id == 2
+    when 2
       create_teacher
     else
       puts 'Enter a valid Input'
@@ -41,9 +42,9 @@ class App
     print 'Parent permission? [Y/N]: '
     permission = gets.chomp
     permission_values = %w[n N]
-    newPerson = Student.new(age, name, permission_values.include?(permission))
-    @persons.push(newPerson)
-  end 
+    new_person = Student.new(age, name, permission_values.include?(permission))
+    @persons.push(new_person)
+  end
 
   def create_teacher
     print 'Age: '
@@ -52,11 +53,11 @@ class App
     name = gets.chomp
     print 'Specialization: '
     specialization = gets.chomp
-    newPerson = Teacher.new(name,specialization, age)
-    @persons.push(newPerson)
+    new_person = Teacher.new(name, specialization, age)
+    @persons.push(new_person)
   end
 
-  def listPersons
+  def list_persons
     @persons.each do |person|
       person_type = person.is_a?(Student) ? 'Student' : 'Teacher'
       puts "[#{person_type}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
@@ -79,7 +80,7 @@ class App
     date = gets.chomp
     Rental.new(@books[book_index], @persons[person_index], date)
     puts 'Rental created successfully'
-  end  
+  end
 
   def get_rental(id)
     person = @persons.find { |per| per.id == id }

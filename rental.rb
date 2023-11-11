@@ -8,7 +8,7 @@ class Rental
 
     @person = person
     person.rentals << self
-    
+
     @date = date
   end
 end
