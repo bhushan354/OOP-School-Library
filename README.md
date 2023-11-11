@@ -85,8 +85,7 @@ To install the project's dependencies, with:
 👤 **Bhushan Deshmukh**
 
 - GitHub: [@bhushan354](https://github.com/bhushan354)
-- LinkedIn: [@bhushan354](https://www.linkedin.com/in/bhushan354)
-- Twitter: [@bhushan354](https://twitter.com/bhushan354)
+- LinkedIn: [@bhushan354](https://www.linkedin.com/in/bhushan-deshmukh-5777851b1/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
