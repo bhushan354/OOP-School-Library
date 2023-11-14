@@ -1,5 +1,6 @@
 # /usr/bin/env ruby
 require './app'
+require './execute_option'
 app = App.new
 
 def main(app)
