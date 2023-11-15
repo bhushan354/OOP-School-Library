@@ -1,14 +1,17 @@
 class Book
-  attr_accessor :title, :author
-  attr_reader :rentals
+  attr_accessor :title, :author, :rental
 
   def initialize(title, author)
     @title = title
     @author = author
-    @rentals = []
+    @rental = []
   end
 
-  def add_rental(rental)
-    @rentals << rental
+  def self.all
+    ObjectSpace.each_object(self).to_a
+  end
+
+  def add_rental(date, person)
+    Rental.new(date, person, self)
   end
 end
