@@ -1,96 +1,127 @@
-require './person'
-require './student'
-require './classroom'
-require './rental'
-require './book'
-require './teacher'
+require_relative 'classroom'
+require_relative 'student'
+require_relative 'teacher'
+require_relative 'book'
+require_relative 'person'
 
 class App
-  def initialize
-    @books = []
-    @persons = []
+  def self.list_books
+    Book.all.map { |book| puts "Title: #{book.title}, Author: #{book.author}" }
   end
 
-  def list_all_books
-    @books.each do |book|
-      puts "Title: \"#{book.title}\", Author: #{book.author}"
-    end
+  def self.list_persons
+    Person.all.map { |person| puts "ID: #{person.id}, Name: #{person.name}, Age: #{person.age}" }
   end
 
-  def create_book(title, author)
-    book = Book.new(title, author)
-    @books.push(book)
-    puts 'Book creation successfully'
+  def self.create_classroom(label)
+    Classroom.new(label)
   end
 
-  def create_person(person_id)
-    case person_id
-    when 1
-      create_student
-    when 2
-      create_teacher
+  def self.create_person
+    print ' Do you want to create a student or a teacher? (s/t) '
+    person_type = gets.chomp.to_s
+    case person_type
+    when 's'
+      create_student(person_type)
+    when 't'
+      create_teacher(person_type)
     else
-      puts 'Enter a valid Input'
+      puts 'Invalid input. Please enter a valid letter.'
+      execute(3)
     end
+    puts 'Person created successfully.'
   end
 
-  def create_student
-    print 'Age: '
-    age = gets.chomp.to_i
-    print 'Name: '
-    name = gets.chomp
-    print 'Parent permission? [Y/N]: '
-    permission = gets.chomp
-    permission_values = %w[n N]
-    new_person = Student.new(age, name, permission_values.include?(permission))
-    @persons.push(new_person)
+  def self.create_student(_person_type)
+    age, name = fetch_user_input('Student')
+    print 'Has parent permission? (Y/N): '
+    parent_permission = gets.chomp.downcase == 'y'
+    Student.new(age, name: name, parent_permission: parent_permission)
   end
 
-  def create_teacher
-    print 'Age: '
-    age = gets.chomp.to_i
-    print 'Name: '
-    name = gets.chomp
+  def self.create_teacher(_person_type)
+    age, name = fetch_user_input('Teacher')
     print 'Specialization: '
     specialization = gets.chomp
-    new_person = Teacher.new(name, specialization, age)
-    @persons.push(new_person)
+    Teacher.new(specialization, age, name: name)
   end
 
-  def list_persons
-    @persons.each do |person|
-      person_type = person.is_a?(Student) ? 'Student' : 'Teacher'
-      puts "[#{person_type}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
+  def self.fetch_user_input(person_type)
+    print "Age for #{person_type}: "
+    age = gets.chomp.to_i
+    print "Name for #{person_type}: "
+    name = gets.chomp.to_s
+    [age, name]
+  end
+
+  def self.create_book
+    title, author = fetch_book_info
+    new_book = Book.new(title, author)
+    puts 'Book created successfully.'
+    new_book
+  end
+
+  def self.fetch_book_info
+    print 'Title: '
+    title = gets.chomp.to_s
+    print 'Author: '
+    author = gets.chomp.to_s
+    [title, author]
+  end
+
+  def self.create_rental
+    display_books_for_rental
+    rental_book_index = gets.chomp.to_i
+    rental_person = select_person(rental_book_index)
+
+    date = fetch_rental_date
+    Rental.new(date, rental_person, rental_book_index)
+    puts 'Rental created successfully.'
+  end
+
+  def self.display_books_for_rental
+    puts 'Please select a book from the following list by number:'
+    Book.all.each_with_index do |book, index|
+      puts "(#{index + 1}) Title: #{book.title}, Author: #{book.author}"
     end
   end
 
-  def create_rental
-    puts 'Select a book from the following list by number'
-    @books.each_with_index do |book, index|
-      puts "#{index}) Title: #{book.title}, Author: #{book.author}"
-    end
-    book_index = gets.chomp.to_i
-    puts 'Select person from the following list by number'
-    @persons.each_with_index do |person, index|
-      person_type = person.instance_of?(Student) ? 'Student' : 'Teacher'
-      puts "#{index})[#{person_type}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
-    end
-    person_index = gets.chomp.to_i
+  def self.select_person(rental_book_index)
+    Person.all[rental_book_index - 1]
+  end
+
+  def self.fetch_rental_date
     print 'Date: '
-    date = gets.chomp
-    Rental.new(@books[book_index], @persons[person_index], date)
-    puts 'Rental created successfully'
+    gets.chomp
   end
 
-  def get_rental(id)
-    person = @persons.find { |per| per.id == id }
+  def self.list_rentals
+    id = fetch_person_id
+    display_person_rentals(id)
+  end
+
+  def self.fetch_person_id
+    print 'ID of person: '
+    gets.chomp.to_i
+  end
+
+  def self.display_person_rentals(id)
+    person = find_person_by_id(id)
     if person
-      puts 'Rentals:'
-      person.rentals.each do |rental|
-        puts "Date: #{rental.date}, Book: \"#{rental.book.title}\" by #{rental.book.author}"
-      end
+      display_rentals(person)
     else
-      puts "Person with ID #{id} not found."
+      puts 'Person not found.'
+    end
+  end
+
+  def self.find_person_by_id(id)
+    Person.all.find { |person| person.id == id }
+  end
+
+  def self.display_rentals(person)
+    puts 'Rentals:'
+    person.rentals.each do |rental|
+      puts "Date: #{rental.date}, Book: #{rental.book.title}"
     end
   end
 end
