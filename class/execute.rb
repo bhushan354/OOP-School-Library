@@ -1,22 +1,36 @@
-def execute_option(app, number)
-  option_methods = {
-    1 => :list_all_books,
-    2 => :list_persons,
-    3 => :create_person,
-    4 => :create_book_option,
-    5 => :create_rental,
-    6 => :get_rental_option,
-    7 => :exit_app
-  }
+# rubocop:disable Metrics
+class Execute
+  def initialize(user_choice)
+    @user_choice = user_choice
+  end
 
-  if option_methods.key?(number)
-    send(option_methods[number], app)
-  else
-    puts 'Enter valid number'
-    main(app)
+  def execute
+    case @user_choice
+
+    when 1
+      puts App.list_books
+      Main.new.menu
+    when 2
+      puts App.list_persons
+      Main.new.menu
+    when 3
+      App.create_person
+      Main.new.menu
+    when 4
+      App.create_book
+      Main.new.menu
+    when 5
+      App.create_rental
+      Main.new.menu
+    when 6
+      App.list_rentals
+      Main.new.menu
+    when 7
+      abort 'Thank you for using the library.'
+    else
+      puts 'Invalid input. Please enter a valid number.'
+      Main.new.menu
+    end
   end
 end
-
-def exit_app(*)
-  puts 'Thank you for using Terminal App, Hope you liked it !'
-end
+# rubocop:enable Metrics
